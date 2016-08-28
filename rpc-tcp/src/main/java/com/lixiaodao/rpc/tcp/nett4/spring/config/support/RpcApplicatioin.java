@@ -47,11 +47,10 @@ public class RpcApplicatioin implements InitializingBean, DisposableBean {
 		if (flag == 1) { // 服务端
 			// 断开 zk
 			RpcServerRegistry.getInstance().close();
-			// TODO 停掉server
 		} else if (flag == 2) {// 客户端
 			// 断开zk
 			RpcClientRegistry.getInstance().close();
-			// TODO 停掉client
+			//  停掉client
 			RpcTcpClientFactory.getInstance().stopClinet();
 		}
 

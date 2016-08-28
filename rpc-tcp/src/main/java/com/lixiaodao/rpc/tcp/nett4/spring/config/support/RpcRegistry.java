@@ -35,7 +35,6 @@ public class RpcRegistry implements InitializingBean {
 			String ip = StringUtils.isNullOrEmpty(this.getIp()) ? InetAddress.getLocalHost().getHostAddress() : this.getIp();
 			return ip+":"+port;
 		} catch (UnknownHostException e) {
-			// TODO Auto-generated catch block
 			throw new RuntimeException("无法获取本地Ip",e);
 		}
 		

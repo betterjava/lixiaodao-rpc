@@ -7,7 +7,7 @@ import org.slf4j.LoggerFactory;
 
 import com.lixiaodao.rpc.core.client.factory.AbstractRpcClientFactory;
 import com.lixiaodao.rpc.core.thread.NamedThreadFactory;
-import com.lixiaodao.rpc.tcp.nett4.client.handler.RpcClientHandler;
+import com.lixiaodao.rpc.tcp.nett4.client.handler.RpcTcpClientHandler;
 import com.lixiaodao.rpc.tcp.nett4.codec.RpcDecoderHander;
 import com.lixiaodao.rpc.tcp.nett4.codec.RpcEncoderHander;
 
@@ -53,7 +53,7 @@ public class RpcTcpClientFactory extends AbstractRpcClientFactory {
 				pipeline.addLast("decoder", new RpcDecoderHander());
     			pipeline.addLast("encoder", new RpcEncoderHander());
     			pipeline.addLast("timeout",new IdleStateHandler(0, 0, 120));
-    			pipeline.addLast("handler",new RpcClientHandler());
+    			pipeline.addLast("handler",new RpcTcpClientHandler());
 			
 			}
 			
@@ -63,8 +63,8 @@ public class RpcTcpClientFactory extends AbstractRpcClientFactory {
 
 	@Override
 	public void stopClinet() {
-		// TODO Auto-generated method stub
-
+		// TODO client 有没有一些缓存
+		workGroup.shutdownGracefully();
 	}
 
 	public static RpcTcpClientFactory getInstance() {
