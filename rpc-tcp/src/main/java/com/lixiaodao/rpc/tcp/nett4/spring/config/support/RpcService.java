@@ -6,6 +6,10 @@ import org.springframework.context.ApplicationContextAware;
 import org.springframework.context.ApplicationEvent;
 import org.springframework.context.ApplicationListener;
 
+import com.lixiaodao.rpc.core.util.StringUtils;
+import com.lixiaodao.rpc.server.filter.RpcFilter;
+import com.lixiaodao.rpc.tcp.nett4.server.RpcTcpServer;
+
 public class RpcService implements ApplicationContextAware, ApplicationListener {
 
 	private String interfacename;// 接口名称 key
@@ -18,7 +22,12 @@ public class RpcService implements ApplicationContextAware, ApplicationListener 
 
 	@Override
 	public void onApplicationEvent(ApplicationEvent event) {
-		//TODO 监听spring application 事件，注册 服务
+		// 监听spring application 事件，注册 服务
+		if (StringUtils.isNullOrEmpty(filterRef) || !(applicationContext.getBean(filterRef) instanceof RpcFilter)) {
+			RpcTcpServer.getInstance().registerService(interfacename, applicationContext.getBean(ref), null);
+		} else {
+			RpcTcpServer.getInstance().registerService(interfacename, applicationContext.getBean(ref), null);
+		}
 	}
 
 	@Override
@@ -26,6 +35,9 @@ public class RpcService implements ApplicationContextAware, ApplicationListener 
 		// 获取 spring 上下文
 		this.applicationContext = applicationContext;
 	}
+	
+	
+	
 
 	public String getInterfacename() {
 		return interfacename;
@@ -41,6 +53,18 @@ public class RpcService implements ApplicationContextAware, ApplicationListener 
 
 	public String getFilterRef() {
 		return filterRef;
+	}
+
+	public void setInterfacename(String interfacename) {
+		this.interfacename = interfacename;
+	}
+
+	public void setRef(String ref) {
+		this.ref = ref;
+	}
+
+	public void setFilterRef(String filterRef) {
+		this.filterRef = filterRef;
 	}
 
 }

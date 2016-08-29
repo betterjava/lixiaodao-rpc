@@ -5,6 +5,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.FactoryBean;
 
 import com.lixiaodao.rpc.core.util.StringUtils;
+import com.lixiaodao.rpc.tcp.nett4.client.proxy.RpcTcpClientProxy;
 
 /**
  * 实现factorybean 是为了构造代理对象
@@ -42,12 +43,11 @@ public class RpcReference implements FactoryBean {
 
 	@Override
 	public Object getObject() throws Exception {
-		// TODO 返回代理对象
-		return null;
+		return RpcTcpClientProxy.getInstance().getProxyService(getObjectType(), timeout, codecType, protocolType, getObjectType().getName(), group);
 	}
 
 	@Override
-	public Class getObjectType() {
+	public Class<?> getObjectType() {
 		try {
 			if (StringUtils.isNullOrEmpty(interfacename)) {
 				LOGGER.warn("interfacename is null");
@@ -87,4 +87,26 @@ public class RpcReference implements FactoryBean {
 		return group;
 	}
 
+	public void setInterfacename(String interfacename) {
+		this.interfacename = interfacename;
+	}
+
+	public void setTimeout(int timeout) {
+		this.timeout = timeout;
+	}
+
+	public void setCodecType(int codecType) {
+		this.codecType = codecType;
+	}
+
+	public void setProtocolType(int protocolType) {
+		this.protocolType = protocolType;
+	}
+
+	public void setGroup(String group) {
+		this.group = group;
+	}
+
+	
+	
 }

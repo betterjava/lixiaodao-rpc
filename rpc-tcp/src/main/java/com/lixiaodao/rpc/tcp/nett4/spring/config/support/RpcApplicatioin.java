@@ -68,4 +68,17 @@ public class RpcApplicatioin implements InitializingBean, DisposableBean {
 		return timeout;
 	}
 
+	public void setAddress(String address) {
+		this.address = address;
+	}
+
+	public void setFlag(int flag) {
+		this.flag = flag;
+	}
+
+	public void setTimeout(int timeout) {
+		this.timeout = timeout;
+	}
+	
+
 }
