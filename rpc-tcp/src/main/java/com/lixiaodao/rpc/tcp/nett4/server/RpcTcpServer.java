@@ -7,6 +7,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.lixiaodao.rpc.core.server.RpcServer;
+import com.lixiaodao.rpc.core.server.handler.factory.RpcServiceHandlerFactory;
 import com.lixiaodao.rpc.core.thread.NamedThreadFactory;
 import com.lixiaodao.rpc.server.filter.RpcFilter;
 import com.lixiaodao.rpc.tcp.nett4.codec.RpcDecoderHander;
@@ -47,8 +48,7 @@ public class RpcTcpServer implements RpcServer {
 
 	@Override
 	public void registerService(String serviceName, Object targetInstance, RpcFilter rpcFilter) {
-		// TODO Auto-generated method stub
-
+		RpcServiceHandlerFactory.getTcpServerHandler().registrerService(serviceName, targetInstance, rpcFilter);
 	}
 
 	@Override
@@ -81,14 +81,14 @@ public class RpcTcpServer implements RpcServer {
 	   
 	   LOGGER.info("-----------------开始启动--------------------------");
 	   bootstrap.bind(new InetSocketAddress(port)).sync();
-	   LOGGER.info("端口号："+port+"的服务端已经启动,作者:liubing");
+	   LOGGER.info("端口号："+port+"的服务端已经启动,作者:cookie");
 	   LOGGER.info("-----------------启动结束--------------------------");
 
 	}
 
 	@Override
 	public void stop() throws Exception {
-		// TODO 注册的信息需要清理掉？
+		RpcServiceHandlerFactory.getTcpServerHandler().clear();
 		bossGroup.shutdownGracefully();
 		workerGroup.shutdownGracefully();
 	}
