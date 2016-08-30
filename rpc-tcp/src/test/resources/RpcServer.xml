@@ -14,15 +14,15 @@
         http://www.springframework.org/schema/tx 
         http://www.springframework.org/schema/tx/spring-tx-2.5.xsd">
     <!--zk 注册中心地址  -->
-    <rpc:application id="rpcRegistryApplication" address="127.0.0.1:2181" flag="1" timeout="5000"></rpc:application>
+    <rpc:application id="lixiaodao-rpc" address="127.0.0.1:2181" flag="1" timeout="2000000" />
      
-    <rpc:registry id="rpcRegistry" port="10010" timeout="200"  procotolType="1" codecType="4" group="demo" threadCount="200"></rpc:registry>
+    <rpc:registry id="rpcRegistry" port="10010" timeout="20000"  procotolType="1" codecType="4" group="demo" threadCount="200"></rpc:registry>
     
-    <rpc:service id="IDemoService"  interfacename="test.cross.plateform.rocketrpc.demo.service.IDemoService" ref="demoService" ></rpc:service>
+    <rpc:service id="IDemoService"  interfacename="test.lixiaodao.rpc.tcp.nett4.IDemoService" ref="demoService" filterRef="demoRpcFilter" ></rpc:service>
     
-    <bean id="demoService" class="test.cross.plateform.rocketrpc.demo.service.impl.DemoServiceImpl" ></bean>
+    <bean id="demoService" class="test.lixiaodao.rpc.tcp.nett4.DemoServiceImpl" ></bean>
     
-    <bean id="demoRpcFilter" class="test.cross.plateform.rocketrpc.demo.service.impl.DemoRpcFilter"></bean>
+    <bean id="demoRpcFilter" class="test.lixiaodao.rpc.tcp.nett4.DemoRpcFilte"></bean>
     
     
 </beans>

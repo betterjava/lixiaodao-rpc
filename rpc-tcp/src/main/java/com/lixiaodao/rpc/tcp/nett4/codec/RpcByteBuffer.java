@@ -11,6 +11,10 @@ public class RpcByteBuffer implements com.lixiaodao.rpc.core.bytebuffer.RpcByteB
 	public RpcByteBuffer(ChannelHandlerContext ctx) {
 		this.ctx = ctx;
 	}
+	
+	public RpcByteBuffer(ByteBuf buffer) {
+		this.buffer = buffer;
+	}
 
 	@Override
 	public RpcByteBuffer get(int capacity) {
@@ -70,7 +74,8 @@ public class RpcByteBuffer implements com.lixiaodao.rpc.core.bytebuffer.RpcByteB
 	public void setReaderIndex(int readerIndex) {
 		buffer.setIndex(readerIndex, buffer.writerIndex());
 	}
-	public static void main(String[] args) {
+	public ByteBuf getBuffer() {
+		return buffer;
 	}
 
 }

@@ -53,12 +53,11 @@ public class RpcReference implements FactoryBean {
 				LOGGER.warn("interfacename is null");
 				return null;
 			} else {
-				Thread.currentThread().getContextClassLoader().loadClass(interfacename);
+				return Thread.currentThread().getContextClassLoader().loadClass(interfacename);
 			}
 		} catch (ClassNotFoundException e) {
 			LOGGER.error("spring 解析失败", e);
 		}
-
 		return null;
 	}
 

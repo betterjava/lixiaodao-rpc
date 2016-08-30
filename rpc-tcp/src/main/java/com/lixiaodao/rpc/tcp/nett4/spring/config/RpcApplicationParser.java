@@ -21,6 +21,7 @@ public class RpcApplicationParser implements BeanDefinitionParser {
 		RootBeanDefinition beanDefinition = new RootBeanDefinition();
 		beanDefinition.setBeanClass(RpcApplicatioin.class);
 		beanDefinition.setLazyInit(false);
+		
 		beanDefinition.getPropertyValues().addPropertyValue("address", address);
 		beanDefinition.getPropertyValues().addPropertyValue("flag", Integer.parseInt(flag));
 		beanDefinition.getPropertyValues().addPropertyValue("timeout", Integer.parseInt(timeout));

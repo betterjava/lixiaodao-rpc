@@ -50,8 +50,8 @@ public class DefaultRpcPortocolImpl implements IRpcProtocol {
 				
 				List<byte[]> requestArgTypes = new ArrayList<byte[]>();
 				List<byte[]> requestArgs = new ArrayList<byte[]>();
-				
-				for(byte[] requestArgType :requestArgTypes){
+				byte[][] requestArgTypeStrings = wrapper.getArgTypes();
+				for(byte[] requestArgType :requestArgTypeStrings){
 					requestArgTypes.add(requestArgType);
 					requestArgTypeLen += requestArgType.length;
 				}

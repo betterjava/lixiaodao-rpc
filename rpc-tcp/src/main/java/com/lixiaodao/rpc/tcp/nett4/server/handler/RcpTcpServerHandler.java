@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.net.InetAddress;
 import java.net.InetSocketAddress;
 import java.net.UnknownHostException;
+import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ThreadPoolExecutor;
 
@@ -25,7 +26,7 @@ public class RcpTcpServerHandler extends ChannelInboundHandlerAdapter{
 	
 	private final static Logger LOGGER = LoggerFactory.getLogger(RcpTcpServerHandler.class);
 	
-	private ThreadPoolExecutor threadPoolExecutor;
+	private ExecutorService threadPoolExecutor;
 	
 	private int port;
 	
@@ -37,7 +38,7 @@ public class RcpTcpServerHandler extends ChannelInboundHandlerAdapter{
 		this.port = port;
 		this.procotolType = procotoltype;
 		this.codecType = codectype;
-		this.threadPoolExecutor = (ThreadPoolExecutor) Executors.newFixedThreadPool(threadCount);
+		this.threadPoolExecutor = Executors.newFixedThreadPool(threadCount);
 	}
 	
 	@Override

@@ -15,9 +15,9 @@
         http://www.springframework.org/schema/tx/spring-tx-2.5.xsd">
     
     <!--zk 注册中心地址  -->
-    <rpc:application id="rpcRegistryApplicationClient" address="127.0.0.1:2181" flag="2" timeout="200" />
+    <rpc:application id="lixiaodao-rpc" address="127.0.0.1:2181" flag="2" timeout="2000" />
     
     <!--group 可以同时支持多组，以符合,隔开  -->
-    <rpc:reference id="demoServiceClient"  interfacename="test.cross.plateform.rocketrpc.demo.service.IDemoService"  procotolType="1" codecType="4" timeout="1000"  group="demo"/>
+    <rpc:reference id="dddemoService"  interfacename="test.lixiaodao.rpc.tcp.nett4.IDemoService"  procotolType="1" codecType="4" timeout="10000"  group="demo"/>
     
 </beans>

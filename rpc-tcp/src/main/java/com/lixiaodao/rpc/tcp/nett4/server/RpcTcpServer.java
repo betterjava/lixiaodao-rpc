@@ -75,7 +75,7 @@ public class RpcTcpServer implements RpcServer {
 	          pipeline.addLast("decoder", new RpcDecoderHander());
 	          pipeline.addLast("encoder", new RpcEncoderHander());
 	          pipeline.addLast("timeout",new IdleStateHandler(0, 0, 120));
-	          pipeline.addLast("handler", new RcpTcpServerHandler(timeout, port, procotolType, codecType));
+	          pipeline.addLast("handler", new RcpTcpServerHandler(threadCount, port, procotolType, codecType));
 	        }
 	      });
 	   

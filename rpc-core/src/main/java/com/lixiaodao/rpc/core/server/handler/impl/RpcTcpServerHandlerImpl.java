@@ -79,7 +79,7 @@ public class RpcTcpServerHandlerImpl implements RpcServerHandler {
 		
 		RpcResponse response = new RpcResponse(request.getId(), codecType, procotolType);
 		// 获取其他参数
-		String targetInstanceName = new String (request.getMethodName());
+		String targetInstanceName = new String (request.getTargetInstanceName());
 		String methodName = new String(request.getMethodName());
 		byte[][] argTypeBytes = request.getArgTypes();
 		String[] argTypes = new String[argTypeBytes.length];
