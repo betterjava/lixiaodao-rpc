@@ -52,7 +52,7 @@ public class RpcTcpServer implements RpcServer {
 	}
 
 	@Override
-	public void start(int port, int timeout) throws Exception {
+	public void start(final int port,final int timeout) throws Exception {
 		ThreadFactory serverBossTF = new NamedThreadFactory("NETTYSERVER-BOSS-");
 		ThreadFactory serverWorkerTF = new NamedThreadFactory("NETTYSERVER-WORKER-");
 		bossGroup = new NioEventLoopGroup(PROCESSORS, serverBossTF);
@@ -75,7 +75,7 @@ public class RpcTcpServer implements RpcServer {
 	          pipeline.addLast("decoder", new RpcDecoderHander());
 	          pipeline.addLast("encoder", new RpcEncoderHander());
 	          pipeline.addLast("timeout",new IdleStateHandler(0, 0, 120));
-	          pipeline.addLast("handler", new RcpTcpServerHandler());
+	          pipeline.addLast("handler", new RcpTcpServerHandler(timeout, port, procotolType, codecType));
 	        }
 	      });
 	   

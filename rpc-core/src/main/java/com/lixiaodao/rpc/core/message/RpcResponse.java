@@ -72,4 +72,11 @@ public class RpcResponse implements Serializable {
 	public void setResponse(Object response) {
 		this.response = response;
 	}
+	public void setResponseClassName(byte[] responseClassName) {
+		this.responseClassName = responseClassName;
+	}
+	
+	public void setMessageLen(int messageLen) {
+		this.messageLen = messageLen;
+	}
 }

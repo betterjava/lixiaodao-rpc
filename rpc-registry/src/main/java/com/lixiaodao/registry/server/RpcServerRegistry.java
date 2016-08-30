@@ -2,6 +2,15 @@ package com.lixiaodao.registry.server;
 
 import com.lixiaodao.registry.factory.RpcRegistryFactory;
 
+/**
+ * server 端的逻辑
+ * 
+ * 1.注册 group-server 一对多
+ * 2.注册 server-client 一对多
+ * 3.client 通过group 找到 对应的server 列表
+ * @author lijia
+ *
+ */
 public class RpcServerRegistry {
 
 	private RpcServerRegistry() {

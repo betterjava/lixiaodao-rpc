@@ -1,6 +1,5 @@
 package com.lixiaodao.rpc.core.protocol.impl;
 
-import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -134,7 +133,7 @@ public class DefaultRpcPortocolImpl implements IRpcProtocol {
 				LOGGER.error("encode request object error", e);
 				throw e;
 			}
-		} else if(message instanceof RpcResponse){ // 服务端发送结果使用
+		} else { // 服务端发送结果使用
 			RpcResponse wrapper = (RpcResponse) message;
 			byte[] body = new byte[0];
 			byte[] className = new byte[0];
@@ -192,16 +191,136 @@ public class DefaultRpcPortocolImpl implements IRpcProtocol {
 			byteBuffer.writeBytes(body);
 			return byteBuffer;
 		}
-
-		return null;
 	}
 
 	@Override
-	public Object decode(RpcByteBuffer wrapper, Object errorObject, int ... originPos) throws Exception {
+	public Object decode(RpcByteBuffer wrapper, Object errorObject, int ... originPosArray) throws Exception {
+		final int originPos;
+		if(originPosArray != null && originPosArray.length == 1){
+			originPos = originPosArray[0];
+		}else{
+			originPos = wrapper.readerIndex();
+		}
 		
-		return null;
-	}
+		if(wrapper.readableBytes() <2){
+			// 因为已经读过数据，所以要重新设置读index
+			wrapper.setReaderIndex(originPos);
+			return errorObject;
+		}
+		byte version = wrapper.readByte();
+		if(version == (byte) 1){
+			byte type = wrapper.readByte();
+			if(type == REQUEST){
+				// 我觉得这里的组包，可以用更简单的，就是用一个字段来记录总长度，然后判断一次就可以了
+				if(wrapper.readableBytes() < REQUEST_HEADER_LEN -2){
+					wrapper.setReaderIndex(originPos);
+					return errorObject;
+				}
+				
+				int codecType = wrapper.readByte();
+				wrapper.readByte();// 我觉得是预留字段
+				wrapper.readByte();
+				wrapper.readByte();
+				
+				int requestId = wrapper.readInt();
+				
+				int timeout = wrapper.readInt();
+				int targetInstanceLen = wrapper.readInt();
+				int methodNameLen = wrapper.readInt();
+				int argsCount = wrapper.readInt();
+				int argInfosLen = argsCount * 4 * 2;
+				int expectedLenInfoLen = argInfosLen + targetInstanceLen
+						+ methodNameLen;
+				
+				if (wrapper.readableBytes() < expectedLenInfoLen) {
+					wrapper.setReaderIndex(originPos);
+					return errorObject;
+				}
+				
+				int expectedLen = 0;
+				int[] argsTypeLen = new int[argsCount];
+				for (int i = 0; i < argsCount; i++) {
+					argsTypeLen[i] = wrapper.readInt();
+					expectedLen += argsTypeLen[i];
+				}
+				int[] argsLen = new int[argsCount];
+				for (int i = 0; i < argsCount; i++) {
+					argsLen[i] = wrapper.readInt();
+					expectedLen += argsLen[i];
+				}
+				byte[] targetInstanceByte = new byte[targetInstanceLen];
+				wrapper.readBytes(targetInstanceByte);
+				
+				byte[] methodNameByte = new byte[methodNameLen];
+				wrapper.readBytes(methodNameByte);
+				
+				if (wrapper.readableBytes() < expectedLen) {
+					wrapper.setReaderIndex(originPos);
+					return errorObject;
+				}
+				byte[][] argTypes = new byte[argsCount][];
+				for (int i = 0; i < argsCount; i++) {
+					byte[] argTypeByte = new byte[argsTypeLen[i]];
+					wrapper.readBytes(argTypeByte);
+					argTypes[i] = argTypeByte;
+				}
+				Object[] args = new Object[argsCount];
+				for (int i = 0; i < argsCount; i++) {
+					byte[] argByte = new byte[argsLen[i]];
+					wrapper.readBytes(argByte);
+					args[i] = argByte;
+				}
+				
+				RpcRequest rpcRequest = new RpcRequest(
+						targetInstanceByte, methodNameByte, argTypes, args,
+						timeout, requestId, codecType, TYPE);
+				
+				int messageLen = RpcProtocols.HEADER_LEN + REQUEST_HEADER_LEN
+						+ expectedLenInfoLen + expectedLen;
+				rpcRequest.setMessageLen(messageLen);
+				return rpcRequest;
+			}else if(type == RESPONSE){
+				if (wrapper.readableBytes() < RESPONSE_HEADER_LEN - 2) {
+					wrapper.setReaderIndex(originPos);
+					return errorObject;
+				}
+				int codecType = wrapper.readByte();
+				wrapper.readByte();
+				wrapper.readByte();
+				wrapper.readByte();
+				
+				int requestId = wrapper.readInt();
+				
+				int classNameLen = wrapper.readInt();
+				int bodyLen = wrapper.readInt();
+				if (wrapper.readableBytes() < classNameLen + bodyLen) {
+					wrapper.setReaderIndex(originPos);
+					return errorObject;
+				}
 
-	public static void main(String[] args) {
+				byte[] classNameBytes = null;
+				if (codecType == RpcCodecFactroy.PB_CODEC) {
+					classNameBytes = new byte[classNameLen];
+					wrapper.readBytes(classNameBytes);
+				}
+				byte[] bodyBytes = new byte[bodyLen];
+				wrapper.readBytes(bodyBytes);
+				
+				RpcResponse responseWrapper = new RpcResponse(
+						requestId, codecType, TYPE);
+				responseWrapper.setResponse(bodyBytes);
+				responseWrapper.setResponseClassName(classNameBytes);
+				int messageLen = RpcProtocols.HEADER_LEN + RESPONSE_HEADER_LEN
+						+ classNameLen + bodyLen;
+				responseWrapper.setMessageLen(messageLen);
+				return responseWrapper;
+			}else{
+				throw new UnsupportedOperationException("protocol type :"
+						+type + " is not supported");
+			}
+		}else{
+			throw new UnsupportedOperationException("protocol version:"+version+"  "
+					+ "  is not supported" );
+		}
 	}
 }

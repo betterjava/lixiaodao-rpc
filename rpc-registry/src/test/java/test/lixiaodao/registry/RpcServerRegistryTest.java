@@ -10,7 +10,6 @@ public class RpcServerRegistryTest {
 			serverRegistry.connectZookeeper("127.0.0.1:2181", 1000);
 			serverRegistry.registerServer("lixiaodao", "127.0.0.1");
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		while (true) {

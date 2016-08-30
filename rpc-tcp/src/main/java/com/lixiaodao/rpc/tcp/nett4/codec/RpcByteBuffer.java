@@ -23,7 +23,6 @@ public class RpcByteBuffer implements com.lixiaodao.rpc.core.bytebuffer.RpcByteB
 
 	@Override
 	public void writeByte(int index, byte data) {
-		// TODO 这儿写的是不是有问题
 		buffer.writeByte(data);
 	}
 

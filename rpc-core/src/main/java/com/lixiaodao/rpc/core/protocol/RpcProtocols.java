@@ -23,8 +23,7 @@ public class RpcProtocols {
 	}
 
 	public static Object decode(RpcByteBuffer bytebufferWrapper, Object errorObject) throws Exception {
-		// 因为接收 是从缓存里面取数据，所有要判断数据的大小是否正好 是要找的对象的大小，这个大小也是不固定的
-
+		// 因为 绑定在 channel 的buffer 是串行的，所以 originPos 只能是零
 		final int originPos = bytebufferWrapper.readerIndex();
 		if (bytebufferWrapper.readableBytes() < 2) {
 			bytebufferWrapper.setReaderIndex(originPos);

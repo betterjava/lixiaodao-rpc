@@ -103,6 +103,8 @@ public class RpcRequest implements Serializable {
 		return messageLen;
 	}
 	
+	public void setMessageLen(int messageLen) {
+		this.messageLen = messageLen;
+	}
 	
-
 }

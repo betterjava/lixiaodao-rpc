@@ -21,7 +21,7 @@ public class RpcRegistryServerImpl implements IRpcRegistryServer {
 
 	@Override
 	public void registerClient(String server, String client) throws Exception {
-		// 临时芥蒂娜，client 断开后，直接给删掉
+		// 临时节点，client 断开后，直接给删掉
 		this.createNode("/"+server+client, client, CreateMode.EPHEMERAL_SEQUENTIAL);
 	}
 
