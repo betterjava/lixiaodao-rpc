@@ -13,9 +13,6 @@ public class RpcRegistryPaser implements BeanDefinitionParser {
 
 	@Override
 	public BeanDefinition parse(Element element, ParserContext parserContext) {
-		// <commonrpc:registry id="rpcRegistry" port="10010" timeout="200"
-		// procotolType="1" codecType="4" group="demo"
-		// threadCount="200"></commonrpc:registry>
 		String id = element.getAttribute("id");
 		String port = element.getAttribute("port");
 		String procotolType = element.getAttribute("procotolType");
